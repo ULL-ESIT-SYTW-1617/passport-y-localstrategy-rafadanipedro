@@ -17,7 +17,7 @@ const localAuth = require('./authentication/local')
 const app = express();
 
 // NOTE: Configurar todas las estrategias
-// passport.use(githubAuth.strategy(config))
+passport.use(githubAuth.strategy(config))
 passport.use(localAuth.strategy(config))
 
 passport.serializeUser((user, cb) => cb(null, user));
@@ -34,13 +34,23 @@ app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true 
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/');
+})
+
 app.get('/login', (req, res) => {
   if (req.isAuthenticated()) return res.redirect('/')
-  res.render('login')
+  res.render('login', {config})
+})
+
+app.get('/reg', (req, res) => {
+  if (req.isAuthenticated()) return res.redirect('/')
+  res.render('reg')
 })
 
 // NOTE: Configurar todos los logins
-// app.use(githubAuth.login())
+app.use(githubAuth.login())
 app.use(localAuth.login())
 
 app.get('/assets/*', express.static('assets'))
@@ -48,7 +58,7 @@ app.get('/assets/*', express.static('assets'))
 // NOTE: configurar todos los middlewares
 
 app.use((req, res, next) => req.isAuthenticated() ? next() : res.redirect('/login'))
-// app.use(githubAuth.middleware(config))
+app.use(githubAuth.middleware(config))
 app.use(localAuth.middleware(config))
 
 app.get('*', express.static('gh-pages'))

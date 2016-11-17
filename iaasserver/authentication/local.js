@@ -28,7 +28,7 @@ const strategy = (config) => {
 const login = () => {
   const router = require('express').Router()
 
-  router.post('/login/local', passport.authenticate('local', {failureRedirect : '/login'}));
+  router.post('/login/local', passport.authenticate('local', {failureRedirect : '/login'}), (req, res) => res.redirect('/'));
 
   return router
 }

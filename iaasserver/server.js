@@ -44,11 +44,9 @@ app.get('/login', (req, res) => {
   res.render('login', {config})
 })
 
-app.get('/reg', (req, res) => {
-  if (req.isAuthenticated()) return res.redirect('/')
-  res.render('reg')
+app.get('/error', (req, res) => {
+  res.render('error')
 })
-
 // NOTE: Configurar todos los logins
 app.use(githubAuth.login())
 app.use(localAuth.login())

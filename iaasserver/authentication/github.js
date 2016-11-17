@@ -6,15 +6,14 @@ let client // Guardar el cliente para usarlo posteriormente
 const strategy = (config) => {
   let {
     host,
-    clientID,
-    clientSecret,
+    Github,
   } = config
 
-  client = github.client({id: clientID, secret: clientSecret})
+  client = github.client({id: Github.clientID, secret: Github.clientSecret})
 
   return new Strategy({
-    clientID: clientID,
-    clientSecret: clientSecret,
+    clientID: Github.clientID,
+    clientSecret: Github.clientSecret,
     callbackURL: `${host}/login/github/return`
   },
   (accessToken, refreshToken, profile, cb) => cb(null, profile))
@@ -34,11 +33,15 @@ const login = () => {
   return router
 }
 
-const middleware = ({ organizacion }) => {
+const middleware = (config) => {
   return (req, res, next) => {
+    console.log(req.user)
+    if (req.user.auth !== 'Github') {
+      return next()
+    }
     client.get(`/users/${req.user.username}/orgs`, {}, function (err, status, body, headers) {
       for(let org of body) {
-        if (org.login === organizacion) {
+        if (org.login === config.Github.organizacion) {
           return next()
         }
       }

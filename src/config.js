@@ -14,13 +14,13 @@ const questions = [
     name: 'privateKey',
     default: '~/.ssh/id_rsa',
     message: 'Cual es la ruta de tu clave privada',
-    validate: ruta => {
+    filter: async (ruta) => {
       if (ruta[0] === '~') ruta = `${process.env.HOME}${ruta.substr(1)}`
       try {
         fs.accessSync(path.resolve(ruta))
-        return true
+        return ruta
       } catch(err) {
-        return err.message
+        throw err.message
       }
     }
   },
@@ -49,6 +49,8 @@ const questions = [
     choices: ['Github','Local']
   }
 ]
+
+const emailRegex = /\w+@\w+?\.[a-zA-Z]{2,8}/g
 
 const authQuestions = {
   Github: [
@@ -89,9 +91,10 @@ const authQuestions = {
       name: 'lectores',
       message: 'Escribe los correos separados por comas',
       default: 'alguien@algo.com, otro@algo.com',
-      validate: email =>{
-        if (email.match(/^\w+@\w+?\.[a-zA-Z]{2,8}$/)) return true
-        return 'correo no valido'
+      filter: async (email) => {
+        let res = email.match(emailRegex)
+        if (res) return res
+        throw 'Email no valido'
       }
     }
   ]
@@ -102,10 +105,9 @@ async function config () {
   if (cfg.privateKey[0] === '~') cfg.privateKey = `${process.env.HOME}${cfg.privateKey.substr(1)}`
 
   for(let auth of cfg.tipoAutenticacion) {
-    await inquirer.prompt(authQuestions[auth])
+    let newCfg = await inquirer.prompt(authQuestions[auth])
+    cfg[auth] = newCfg
   }
 
   return cfg
 }
-
-config().then(console.log).catch(console.error)

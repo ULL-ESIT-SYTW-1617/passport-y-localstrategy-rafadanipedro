@@ -7,7 +7,7 @@
 }
 
 body {
-  background: url("/assets/libro.jpg");
+  background: url("/assets/libro3.jpg");
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -216,4 +216,35 @@ body {
     float:right;
     width:100px;
     height: 20px;
+}
+
+.error_center {
+  width: 350px;
+  padding: 20px 30px;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  position: absolute;
+  text-align: center;
+  left: 0;
+  right: 0;
+  top: 50%;
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.error_text{
+  color: white;
+  font-size: 300%;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.error_text_2{
+  color: white;
+  font-size: 100%;
 }

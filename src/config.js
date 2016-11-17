@@ -96,11 +96,22 @@ const authQuestions = {
         if (res) return res
         throw 'Email no valido'
       }
+    },
+    {
+      type: 'input',
+      name: 'tokenDropbox',
+      message: 'Entre en esta direccion para crear una OauthApplication enDropbox https://www.dropbox.com/developers/apps y escribe "confirmar" para continuar',
+      validate: conf => conf === 'confirmar'
+    },
+    {
+      type: 'input',
+      name: 'token',
+      message: 'Cual es el token generado'
     }
   ]
 }
 
-async function config () {
+export default async function config () {
   let cfg = await inquirer.prompt(questions)
   if (cfg.privateKey[0] === '~') cfg.privateKey = `${process.env.HOME}${cfg.privateKey.substr(1)}`
 
@@ -111,3 +122,4 @@ async function config () {
 
   return cfg
 }
+

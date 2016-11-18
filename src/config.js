@@ -111,7 +111,7 @@ const authQuestions = {
   ]
 }
 
-export default async function config () {
+async function config () {
   let cfg = await inquirer.prompt(questions)
   if (cfg.privateKey[0] === '~') cfg.privateKey = `${process.env.HOME}${cfg.privateKey.substr(1)}`
 
@@ -123,3 +123,4 @@ export default async function config () {
   return cfg
 }
 
+config().then(console.log).catch(console.error)

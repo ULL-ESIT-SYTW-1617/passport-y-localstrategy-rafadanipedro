@@ -3,7 +3,8 @@ import fs from 'fs'
 
 export default async function upload (sftp, pathLocal, pathRemoto) {
   // Funcion que actualiza el servidor remoto con los archivos locales.
-  process.stdout.write(`${pathLocal} -> ${pathRemoto}`)
+  // process.stdout.write(`${pathLocal} -> ${pathRemoto}`)
+  process.stdout.write('.')
 
   if (fs.lstatSync(path.join(pathLocal)).isDirectory()) {
     console.log(' Creando directorio...')

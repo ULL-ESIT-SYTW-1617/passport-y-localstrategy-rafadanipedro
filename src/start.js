@@ -23,6 +23,8 @@ export default async function start (config) {
 
   const serverConfig = JSON.stringify(config, undefined, 2)
 
+  console.log(serverConfig)
+
   fs.writeFileSync(path.resolve(__dirname, '../iaasserver/config.json'), serverConfig)
 
   try {

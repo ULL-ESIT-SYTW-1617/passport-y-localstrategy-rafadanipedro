@@ -2,18 +2,20 @@ const Dropbox = require('dropbox')
 const path = '/db.json'
 
 let dbx
+let db = {}
 
 function getDB () {
   return new Promise((res, rej) => {
     dbx.filesDownload({ path }).then(data => {
-      res(JSON.parse(data.fileBinary))
+      db = JSON.parse(data.fileBinary)
+      res(db)
     }).catch(rej)
   })
 }
 
 function uploadDB (data = {}) {
   return new Promise((res, rej) => {
-    dbx.filesUpload({contents: JSON.stringify(data, undefined, 2), path, mode: {".tag": "overwrite"}}).then(() => {
+    dbx.filesUpload({contents: JSON.stringify(db, undefined, 2), path, mode: {".tag": "overwrite"}}).then(() => {
       res('Done')
     }).catch(rej)
   })
@@ -44,17 +46,15 @@ class Schema {
   }
 
   save () {
-    return getDB().then(db => {
-      if (!db[this.modelName]) db[this.modelName] = []
-      let collection = db[this.modelName]
-      let doc = collection.find(doc => doc.id === this.id)
-      if (!doc) {
-        collection.push({content: this.params, id: this.id})
-      } else {
-        doc.content = this.params
-      }
-      return uploadDB(db)
-    })
+    if (!db[this.modelName]) db[this.modelName] = []
+    let collection = db[this.modelName]
+    let doc = collection.find(doc => doc.id === this.id)
+    if (!doc) {
+      collection.push({content: this.params, id: this.id})
+    } else {
+      doc.content = this.params
+    }
+    return uploadDB(db)
   }
 }
 
@@ -108,8 +108,9 @@ function findOneUpdateRaw (modelName, Child, params, mod) {
         }
         let child = new Child(doc.content)
         child.id = doc.id
-        child.save().then(res).catch(rej)
+        return child.save().then(res).catch(rej)
       }
+      return res(doc)
     }).catch(rej)
   })
 }
@@ -122,3 +123,20 @@ module.exports = {
   findOneRaw,
   findOneUpdateRaw
 }
+
+/*
+Ejemplo de dropbosee!!
+
+dropbosee.connect('gcIDmUe91mMAAAAAAAA9BNTsNxfaUGZ_gr_GrmjNKUT-mHiQ8NqSoYbcb_iJQXyf').then(() => {
+  console.log('Conectado con la base de datos!!')
+
+  let users = [
+    new User({email: 'rafa@rafa.com', password: '1234'}),
+    new User({email: 'daniel@daniel.com', password: 'patata'}),
+    new User({email: 'pedro@pedro.com', password: 'yoloo'})
+  ]
+
+  let proms = users.map(user => user.save())
+
+  Promise.all(proms).then(() => console.log('Hecho!'))
+})*/

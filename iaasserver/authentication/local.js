@@ -2,75 +2,56 @@ const passport = require('passport');
 const { Strategy } = require('passport-local')
 const Dropbox = require('dropbox')
 const bcrypt = require('bcrypt-nodejs')
-
-
-let dbx
-let usuarios = []
-
-function inicializar (config) {
-  return new Promise((res, rej) => {
-    dbx.filesDownload({path: '/usuarios.json'}).then(data => {
-      res(JSON.parse(data.fileBinary))
-    }).catch(err => {
-      // No existe usuarios.json, hay que crearlo
-      let users = config.Local.lectores.map(lector => ({email: lector, password: bcrypt.hashSync('1234')}))
-      let json = JSON.stringify(users, undefined, 2)
-      dbx.filesUpload({contents: json, path: "/usuarios.json", mode: {".tag": "overwrite"}}).then(() => {
-        res(users)
-      }).catch(console.error)
-    })
-  })
-}
+const dropbosee = require('./dropbosee')
+const User = require('../models/user')
 
 const strategy = (config) => {
-  console.log(config)
-  console.log(config.Local.token)
-  dbx = new Dropbox({ accessToken: config.Local.token })
-  inicializar(config).then(users => usuarios = users)
+  dropbosee.connect(config.Local.token).then(() => {
+    console.log('Conectado con Dropbox!!')
+    User.find().then(users => {
+      if(!users.length) {
+        let users = config.Local.lectores.map(lector => {
+          let user = new User({email: lector, password: bcrypt.hashSync('1234')})
+          return user.save()
+        })
+        Promise.all(users).then(() => console.log('Guardado todos los usuarios'))
+      }
+    })
+  })
 
   return new Strategy({
     usernameField: 'email',
     passwordField: 'password'
   }, (email, password, done) => {
-    let usuario = usuarios.find(usr => usr.email === email)
-    if (usuario) {
-      // verificar la contraseña
-      if (bcrypt.compareSync(password, usuario.password)) {
-        //if(contraseña es 1234)
-        usuario.auth = 'Local'
-        return done(null, usuario)
-      } else {
-        return done(null, false)
+    User.findOne({email}).then(user => {
+      if (!user) return done(null, false)
+      if (bcrypt.compareSync(password, user.content.password)) {
+        user.auth = 'Local'
+        return done(null, user)
       }
-    } else {
       return done(null, false)
-    }
+    }).catch(console.error)
   })
 }
 
 const login = () => {
   const router = require('express').Router()
+
   router.get('/login/password', (req, res) => {
     if (!req.isAuthenticated()) return res.redirect('/login')
-    console.log(req.user)
-    console.log(req.user.email)
-    res.render('reg', req.user)
+    res.render('reg', req.user.content)
   })
 
   router.post('/login/password', (req, res) => {
-    if (bcrypt.compareSync(req.body.OldPassword, req.user.password)) {
+    if (bcrypt.compareSync(req.body.OldPassword, req.user.content.password)) {
       if (req.body.NewPass === req.body.ConfirmPass) {
-        let usuario = usuarios.find(usr => usr.email === req.user.email)
-        usuario.password = bcrypt.hashSync(req.body.NewPass)
-
-        let json = JSON.stringify(usuarios, undefined, 2)
-        dbx.filesUpload({contents: json, path: "/usuarios.json", mode: {".tag": "overwrite"}}).then(() => {
-          res.send('Todo correcto, amigo')
-        }).catch((err) => {
+        console.log('Ok, las contraseñas coinciden')
+        return User.findOneUpdate({email: req.user.content.email}, {password: bcrypt.hashSync(req.body.NewPass)}).then(() => {
+          res.send('OOOOkkkkkk')
+        }).catch(err => {
           console.log(err)
-          res.send(err)
+          res.send(':(')
         })
-        return
       }
     }
     res.redirect('/login/password')
@@ -81,7 +62,12 @@ const login = () => {
   return router
 }
 
-const middleware = () => (req, res, next) => next()
+const middleware = () => (req, res, next) => {
+  if(bcrypt.compareSync('1234', req.user.content.password)) {
+      return res.redirect('/login/password')
+    }
+  next()
+}
 
 module.exports = {
   strategy,

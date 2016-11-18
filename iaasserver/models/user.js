@@ -1,4 +1,4 @@
-const dropbosee = require('../authentication/dropbox')
+const dropbosee = require('../authentication/dropbosee')
 
 class User extends dropbosee.Schema {
   constructor(params) {
@@ -28,18 +28,3 @@ User.findOneUpdate = (params, mod) => {
 }
 
 module.exports = User
-
-/*
-
-Como hacer una conexión con dropbosee
-
-dropbosee.connect('gcIDmUe91mMAAAAAAAA9BNTsNxfaUGZ_gr_GrmjNKUT-mHiQ8NqSoYbcb_iJQXyf').then(() => {
-  console.log('Conectado con la base de datos!!')
-
-
-  let user = new User({email: 'rafa@rafa.com', password: '1234'})
-
-  user.save().then(() => {
-    User.find().then(console.log)
-  })
-})*/

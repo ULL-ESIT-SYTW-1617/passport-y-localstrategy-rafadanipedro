@@ -26,7 +26,7 @@ passport.deserializeUser((obj, cb) => cb(null, obj));
 app.set('views', path.resolve(__dirname + '/views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('combined'));
+app.use(logger('tiny'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));

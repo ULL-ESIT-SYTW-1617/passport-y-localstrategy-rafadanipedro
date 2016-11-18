@@ -45,7 +45,7 @@ const middleware = (config) => {
           return next()
         }
       }
-      res.render('error', {error: 'No tienes permisos para ver el libro'})
+      res.render('error', {error: false})
     });
   }
 }

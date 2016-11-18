@@ -61,7 +61,7 @@ app.use(localAuth.middleware(config))
 
 app.get('*', express.static('gh-pages'))
 
-app.use((req, res) => res.render('error', {error: 'Tienes que desplegar el libro al menos una vez'}))
+app.use((req, res) => res.render('error', {error: true}))
 
 const port = process.env.PORT || 8080
 console.log(`Express escuchando en puerto ${port}`)

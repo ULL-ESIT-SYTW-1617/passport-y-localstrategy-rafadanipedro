@@ -16,7 +16,7 @@ const strategy = (config) => {
         })
         Promise.all(users).then(() => console.log('Guardado todos los usuarios'))
       }
-    })
+    }).catch(console.error)
   })
 
   return new Strategy({

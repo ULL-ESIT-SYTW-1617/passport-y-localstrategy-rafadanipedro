@@ -61,6 +61,7 @@ class Schema {
 function findByIdRaw (modelName, id) {
   return new Promise((res, rej) => {
     getDB().then(db => {
+      if(!db[modelName]) db[modelName] = []
       res(db[modelName].find(doc => doc.id === id))
     }).catch(rej)
   })
@@ -69,6 +70,7 @@ function findByIdRaw (modelName, id) {
 function findRaw (modelName, params = {}) {
   return new Promise((res, rej) => {
     getDB().then(db => {
+      if(!db[modelName]) db[modelName] = []
 
       let docs = []
 

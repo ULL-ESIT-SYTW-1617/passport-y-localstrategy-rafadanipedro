@@ -45,12 +45,12 @@ Para permitir que una aplicación web pueda acceder a la plataforma Github, hay 
 Para realizar la aplicación, se deben realizar una serie de pasos:
 
 * Registrar la nueva aplicación.
-![OauthApplication](https://raw.githubusercontent.com/ULL-ESIT-SYTW-1617/autenticacion-oauth-con-passport-rafadanipedro/master/capturas_readme/captura_enlace_oauth.png)
+![OauthApplication](https://raw.githubusercontent.com/ULL-ESIT-SYTW-1617/passport-y-localstrategy-rafadanipedro/master/capturas_readme/captura_enlace_oauth.png)
 
-![Registrar nueva app](https://raw.githubusercontent.com/ULL-ESIT-SYTW-1617/autenticacion-oauth-con-passport-rafadanipedro/master/capturas_readme/captura_boton_registrar_app.png)
+![Registrar nueva app](https://raw.githubusercontent.com/ULL-ESIT-SYTW-1617/passport-y-localstrategy-rafadanipedro/master/capturas_readme/captura_boton_registrar_app.png)
 
 * Una vez se accede al menú de registro de nueva aplicación, se debe añadir un nombre a a la aplicación.
-![Añadir descripcion](https://raw.githubusercontent.com/ULL-ESIT-SYTW-1617/autenticacion-oauth-con-passport-rafadanipedro/master/capturas_readme/captura_creacion_app.png)
+![Añadir descripcion](https://raw.githubusercontent.com/ULL-ESIT-SYTW-1617/passport-y-localstrategy-rafadanipedro/master/capturas_readme/captura_creacion_app.png)
 * A continuación, se debe añadir el enlace de la aplicación principal.El enlace debe tener el siguiente formato: `http(s)://hostname`
 * Finalmente, se añade una pequeña descripción a la aplicación creada y se le añade la authorization callback url que debe tener el siguiente formato: `http(s)://hostname/auth/github_oauth/callback`
 * Cuando la aplicación ya ha sido creada, se puede acceder a la misma y utilizar el clientId y el clientSecret para poder realizar la autenticación mediante Oauth.

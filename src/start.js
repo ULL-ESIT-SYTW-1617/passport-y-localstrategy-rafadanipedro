@@ -21,12 +21,7 @@ export default async function start (config) {
       privateKey: fs.readFileSync(config.privateKey, {encoding: 'utf8'})
   }
 
-  const serverConfig = JSON.stringify({
-    host: config.host,
-    clientID: config.clientID,
-    clientSecret: config.clientSecret,
-    organizacion: config.organizacion
-  }, undefined, 2)
+  const serverConfig = JSON.stringify(config, undefined, 2)
 
   fs.writeFileSync(path.resolve(__dirname, '../iaasserver/config.json'), serverConfig)
 

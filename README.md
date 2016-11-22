@@ -1,4 +1,4 @@
-# Práctica: Práctica: Passport y LocalStrategy. Práctica 8 de SYTW
+# Práctica: Passport y LocalStrategy. Práctica 8 de SYTW
 
 [![Version NPM](https://img.shields.io/npm/v/plugin-iaas-passport-rafadanipedro.svg)](https://www.npmjs.com/package/plugin-iaas-passport-rafadanipedro)
 

@@ -33,9 +33,10 @@ Ahora despliega con `gulp IaasPassportRafadanipedro`, y debería desplegar tu li
 #### Generar token con Dropbox
 
 Para que podamos almacenar los datos de los usuarios, usaremos Dropbox. Para ello, necesitamos generar un token que nos proporcione acceso. Primero, entramos a https://www.dropbox.com/developers/apps, creamos una nueva aplicación y generamos un token. Los pasos serían los siguientes:
-1. Create App
-2. Dropbox Api
-3. App folder
+
+1. Create App  
+2. Dropbox Api  
+3. App folder  
 4. Nombre de la aplicación
 
 Una vez creada la aplicación, el menú que se nos abre, bajamos hasta el apartado de `OAuth 2` y en la opción `Generated access token` le damos al botón `Generate` y copiamos el token que allí nos aparece para introducirlo posteriormente en la terminal.
